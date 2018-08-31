@@ -1,0 +1,115 @@
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  
+    min-width: 360px;
+    min-height: 240px;
+    max-width: 25vw;
+  
+    background: #eee;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+    margin: 1em;
+  
+    border-radius: 6px;
+
+    /* opacity: 0;
+    animation: cardFade 0.5s;
+    animation-fill-mode: forwards; */
+}
+
+@keyframes cardFade {
+    100% { opacity: 1 }
+}
+
+.card comment {
+    flex: 5;
+    color: #333;  
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    padding: 0.75em;  
+}
+
+comment p {
+    max-width: 24vw;    
+    word-wrap: break-word;
+}
+  
+.author {
+    align-self: flex-start;
+    margin-left: 0.5em;
+    margin-bottom: 0.5em;
+    color: #666;
+    font-style: italic;
+    font-size: 0.8rem;  
+}
+  
+.reactions {
+    padding: 0.5em 0;
+    width: 100%;
+    flex: 1;
+  
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    transition: 0.2s;    
+}
+  
+.emojiContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+  
+.emoji {
+    /* transition: 0.2s; */
+}
+  
+.emoji:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
+@media screen and (max-width: 1280px) {
+    .card {
+        min-width: 35vw;
+    }
+
+    comment p {
+        max-width: 34vw;    
+    }
+}
+
+@media screen and (max-width: 896px) {
+    .card {
+        min-width: 30vw;        
+        min-width: 40vw;
+    }
+
+    comment p {
+        max-width: 39vw;    
+    }
+}
+
+@media screen and (max-width: 672px) {
+    .card {
+        min-width: 90vw;
+        max-width: 90vw;        
+    }
+
+    comment p {
+        max-width: 79vw;  
+        text-align: center;  
+    }
+
+    .reactions {
+        flex-wrap: wrap;        
+    }
+}

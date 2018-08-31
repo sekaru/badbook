@@ -1,0 +1,105 @@
+service: badbookapi
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  environment:
+    USERS_TABLE: ${self:service}-${opt:stage, self:provider.stage}_USERS
+    POSTS_TABLE: ${self:service}-${opt:stage, self:provider.stage}_POSTS
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:*"
+
+plugins:
+  - serverless-plugin-optimize
+  - serverless-dynamodb-local
+  - serverless-offline
+
+custom:
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+    migration:
+      dir: offline/migrations
+
+functions:
+  register:
+    handler: handlers/users.register
+    events:
+      - http: POST register
+  login:
+    handler: handlers/users.login
+    events:
+      - http: POST login
+  cookielogin:
+    handler: handlers/users.cookielogin
+    events:
+      - http: POST cookielogin
+  logout:
+    handler: handlers/users.logout
+    events:
+      - http: POST logout
+  hint:
+    handler: handlers/users.hint
+    events:
+      - http: GET hint/{name}
+  stats:
+    handler: handlers/users.stats
+    events:
+      - http: GET stats/{name}
+  newpost:
+    handler: handlers/posts.newpost
+    events:
+      - http: POST posts
+  getposts:
+    handler: handlers/posts.getposts
+    events:
+      - http: GET posts
+  react:
+    handler: handlers/posts.react
+    events:
+      - http: POST react
+
+resources:
+  Resources:
+    UsersTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: name
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: name
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.USERS_TABLE}
+    PostsTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:provider.environment.POSTS_TABLE}

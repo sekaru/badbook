@@ -1,0 +1,77 @@
+.statusForm {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    width: 45vw;
+    height: 200px;
+    margin: 0 auto; 
+    margin-bottom: 2em; 
+}
+  
+.statusForm textarea {
+    flex-grow: 1;
+    width: 100%;
+    border: 1px solid #e2e2e2;  
+    border-radius: 6px;
+    padding: 1em;  
+    transition: 0.2s;  
+}
+
+.toolbar {
+    width: 100%;
+    margin-top: 0.5em;
+    align-self: flex-start;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.toolbar input[type="text"] {
+    width: 96px;
+    height: 24px;
+    margin-left: 0.5em;
+
+    border: 1px solid #e2e2e2;  
+    border-radius: 6px;
+}
+
+.toolbar input[type="checkbox"] {
+    margin-left: 0.5em;
+
+    border: 1px solid #e2e2e2;  
+}
+
+@media screen and (max-width: 1280px) {
+    .statusForm {
+        width: 60vw;
+    }
+}
+
+@media screen and (max-width: 896px) {
+    .statusForm {
+        width: 80vw;
+    }
+}
+
+@media screen and (max-width: 672px) {
+    .statusForm {
+        width: 90vw;
+        height: 40vh;        
+    }
+
+    .toolbar {
+        flex-wrap: wrap;
+        text-align: center;
+    }
+
+    .toolbar > * {
+        margin-bottom: 0.5em;
+    }
+
+    input {
+        width: 100%;
+    }
+}

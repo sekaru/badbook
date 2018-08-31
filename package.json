@@ -1,0 +1,26 @@
+{
+  "name": "badbook",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "aws-sdk": "^2.302.0",
+    "bcryptjs": "^2.4.3",
+    "create-inferno-context": "^0.2.4",
+    "inferno": "^5.4.2",
+    "inferno-scripts": "6.3.2",
+    "universal-cookie": "^3.0.4",
+    "uuid": "^3.3.2"
+  },
+  "scripts": {
+    "start": "inferno-scripts start",
+    "build": "inferno-scripts build",
+    "test": "inferno-scripts test --env=jsdom",
+    "eject": "inferno-scripts eject"
+  },
+  "homepage": "https://sleepystudios.net/badbook",
+  "devDependencies": {
+    "serverless-dynamodb-local": "^0.2.33",
+    "serverless-offline": "^3.25.9",
+    "serverless-plugin-optimize": "^3.1.1-rc.1"
+  }
+}

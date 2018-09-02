@@ -5,6 +5,7 @@ import Spinner from '../spinner/Spinner'
 import Chip from '../chip/Chip'
 import Cookies from 'universal-cookie'
 import menu from '../../assets/menu.png'
+import { url, emoji } from '../../utils/common'
 
 const cookies = new Cookies()
 
@@ -25,7 +26,7 @@ export default class AccountBox extends Component {
         if(cookies.get('user')) {
             this.setMode(4)
 
-            fetch("https://5hukltdu5f.execute-api.us-east-1.amazonaws.com/dev/cookielogin", {method: 'post', body: JSON.stringify({user: cookies.get('user')})})
+            fetch(url + "/cookielogin", {method: 'post', body: JSON.stringify({user: cookies.get('user')})})
             .then(res => {
                 return res.json()
             })
@@ -212,8 +213,8 @@ export default class AccountBox extends Component {
                 <p>You've made {context.state.stats.count} {context.state.stats.count===1 ? "post" : "posts"}</p>
                 <div className="reacts">                                        
                 {
-                    ["👍", "🙌", "😂", "👏", "👎"].map((emoji, index) => {
-                        return <div className="emojiContainer">{emoji} <Chip colour="#333" text={context.state.stats.reacts[index]} /></div>
+                    emoji.map((e, index) => {
+                        return <div className="emojiContainer">{e} <Chip colour="#333" text={context.state.stats.reacts[index]} /></div>
                     })
                 }  
                 </div>     

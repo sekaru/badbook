@@ -3,11 +3,11 @@ import createInfernoContext from 'create-inferno-context'
 import * as UserFuncs from './User'
 import * as PostFuncs from './Post'
 import Cookies from 'universal-cookie'
+import { url } from '../../utils/common'
 
 const cookies = new Cookies()
 
 const Context = createInfernoContext()
-const loc = "https://5hukltdu5f.execute-api.us-east-1.amazonaws.com/dev"
 
 export class ContextProvider extends Component {
     state = {
@@ -17,7 +17,7 @@ export class ContextProvider extends Component {
     }
 
     componentWillMount() {
-        fetch(loc + "/posts")
+        fetch(url + "/posts")
         .then(res => {
             return res.json()
         })
@@ -32,7 +32,7 @@ export class ContextProvider extends Component {
     }
 
     register = (user, callback) => {
-        UserFuncs.register(loc, user, resJson => {
+        UserFuncs.register(user, resJson => {
             if(!resJson.resp) {
                 alert(resJson.msg)
                 callback(1)             
@@ -46,7 +46,7 @@ export class ContextProvider extends Component {
     }
 
     login = (user, callback) => {
-        UserFuncs.login(loc, user, resJson => {
+        UserFuncs.login(user, resJson => {
             if(!resJson.resp) {           
                 alert(resJson.msg)
                 callback(2)
@@ -70,7 +70,7 @@ export class ContextProvider extends Component {
         cookies.set('user', res.name + "/" + res.token)
 
         // request stats
-        UserFuncs.getStats(loc, res.name, resJson => {
+        UserFuncs.getStats(res.name, resJson => {
             if(!resJson.resp) {           
                 alert(resJson.msg)
                 return
@@ -82,7 +82,7 @@ export class ContextProvider extends Component {
 
     getHint = (name, callback) => {
         // get their password hint
-        UserFuncs.getHint(loc, name, resJson => {
+        UserFuncs.getHint(name, resJson => {
             if(!resJson.resp) {           
                 alert(resJson.msg)
                 callback(null)
@@ -94,7 +94,7 @@ export class ContextProvider extends Component {
     }
 
     logout = () => {
-        UserFuncs.logout(loc, cookies.get('user'))
+        UserFuncs.logout(cookies.get('user'))
         this.setState({name: null, stats: null})
 
         cookies.remove('user')
@@ -107,7 +107,7 @@ export class ContextProvider extends Component {
     }
 
     addPost = (post) => {
-        PostFuncs.addPost(loc, this.state.user, post, resJson => {
+        PostFuncs.addPost(this.state.user, post, resJson => {
             if(!resJson.resp) {
                 alert(resJson.msg)
                 return
@@ -126,7 +126,7 @@ export class ContextProvider extends Component {
     }
 
     react = (id, emoji) => {
-        PostFuncs.react(loc, id, this.state.user, emoji, resJson => {
+        PostFuncs.react(id, this.state.user, emoji, resJson => {
             if(!resJson.resp) {
                 alert(resJson.msg)
                 return

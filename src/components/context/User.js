@@ -1,10 +1,12 @@
-export const register = (loc, user, callback) => {
+import { url } from '../../utils/common'
+
+export const register = (user, callback) => {
     if(user.pass!==user.pass2) {
         alert("Those passwords don't match!")
         return
     }
 
-    fetch(loc + "/register", {method: 'post', body: JSON.stringify(user)})
+    fetch(url + "/register", {method: 'post', body: JSON.stringify(user)})
     .then(res => {
         return res.json()
     })
@@ -13,8 +15,8 @@ export const register = (loc, user, callback) => {
     })
 }
 
-export const login = (loc, user, callback) => {
-    fetch(loc + "/login", {method: 'post', body: JSON.stringify(user)})
+export const login = (user, callback) => {
+    fetch(url + "/login", {method: 'post', body: JSON.stringify(user)})
     .then(res => {
         return res.json()
     })
@@ -23,8 +25,8 @@ export const login = (loc, user, callback) => {
     })
 }
 
-export const getStats = (loc, user, callback) => {
-    return fetch(loc + "/stats/" + user)
+export const getStats = (user, callback) => {
+    return fetch(url + "/stats/" + user)
     .then(res => {
         return res.json()
     })
@@ -33,8 +35,8 @@ export const getStats = (loc, user, callback) => {
     })
 }
 
-export const getHint = (loc, user, callback) => {
-    return fetch(loc + "/hint/" + user)
+export const getHint = (user, callback) => {
+    return fetch(url + "/hint/" + user)
     .then(res => {
         return res.json()
     })
@@ -43,6 +45,6 @@ export const getHint = (loc, user, callback) => {
     })
 }
 
-export const logout = (loc, user) => {
-    fetch(loc + "/logout", {method: 'post', body: JSON.stringify({user: user})})
+export const logout = (user) => {
+    fetch(url + "/logout", {method: 'post', body: JSON.stringify({user: user})})
 }

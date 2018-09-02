@@ -2,6 +2,7 @@ import { Component } from 'inferno'
 import './Card.css'
 import { Consumer } from '../context/Context'
 import Chip from '../chip/Chip'
+import { emoji } from '../../utils/common'
 
 export default class Card extends Component {
   render() {
@@ -29,20 +30,18 @@ export default class Card extends Component {
   renderReactions() {
       return (
         <div className="reactions">
-            {["👍", "🙌", "😂", "👏", "👎"].map((emoji, index) => this.toEmoji(emoji, index))}                       
+            {emoji.map((e, index) => this.toEmoji(e, index))}                       
         </div>
       )
   }
 
-  toEmoji(emoji, index) {
+  toEmoji(e, index) {
     return (
         <Consumer>
             {context => (
                 <span className="emojiContainer">
                     {/* Emoji character */}
-                    <span onClick={() => context.react(this.props.id, index)} className="emoji" role="img" arial-label="Reaction">
-                        {emoji}
-                    </span>
+                    <span onClick={() => context.react(this.props.id, index)} className="emoji" role="img" arial-label="Reaction">{e}</span>
 
                     {/* Number of reacts */}
                     <Chip colour={this.props.reacts[index].includes(context.state.user) ? "#333" : null} text={this.props.reacts[index].length} />

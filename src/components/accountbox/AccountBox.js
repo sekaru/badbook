@@ -67,7 +67,7 @@ export default class AccountBox extends Component {
     renderDefault() {
         return (
             <div className="account">
-                <p>Make an account to rate posts and see stats. No email required.</p>
+                <div className="registerText">Make an account to rate posts and see stats. No email required.</div>
                 <button onClick={() => this.setMode(1)}>Register</button>
                 <span onClick={() => this.setState({show: false})} className="smallText closeAccountBox">Not right now</span>
 

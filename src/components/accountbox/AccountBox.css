@@ -47,9 +47,12 @@
 }
 
 .hidden {
-    width: 32px;
-    height: 32px;
-    padding: 0.5em;
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0.5em !important;
+    top: 1em !important;
+    left: 1em !important;
+    border-radius: 6px !important;
     
     transition: 0.2s;
 }
@@ -78,5 +81,9 @@
         border-radius: 0;
         padding: 1.5em 0; 
         text-align: center;     
+    }
+
+    .account input {
+        width: 90vw;
     }
 }

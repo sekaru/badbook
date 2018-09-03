@@ -43,6 +43,12 @@ module.exports.newpost = async (event, context) => {
     // character limits
     if(body.post.text.length>2500) body.post.text = body.post.text.substring(0, 2500)
 
+    if(body.post.text.trim().length<=0) {
+        res.statusCode = 400
+        res.body = JSON.stringify({resp: false, msg: "Missing required details"})
+        return res
+    }
+
     let post = {
         id: uuid.v4(),
         author: user.name,

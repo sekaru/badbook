@@ -35,7 +35,7 @@
     margin-left: 0.5em;
 
     padding: 0;
-    border: none;
+    border: 1px solid #e2e2e2;
 }
 
 .control {

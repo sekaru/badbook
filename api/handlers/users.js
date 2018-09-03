@@ -5,24 +5,6 @@ const bcrypt = require('bcryptjs')
 const uuid = require('uuid')
 const helpers = require('../helpers')
 
-function getUser(name) {
-    // get a single user
-    return new Promise((resolve, reject) => {
-        db.list({
-            TableName: process.env.USERS_TABLE
-        }, (err, result) => {
-            if(err) return reject(err)
-
-            const users = result.Items
-            const user = users.find(user => {
-                return user.name===name
-            })
-
-            resolve(user)
-        })
-    })
-}
-
 function getUserStats(name) {
     return new Promise((resolve, reject) => {
         db.list({
@@ -74,7 +56,7 @@ module.exports.register = async (event, context) => {
     if(!helpers.hasAllParams(body, ['name', 'pass'], res)) return res
 
     // try and find a duplicate user
-    const user = await getUser(body.name)
+    const user = await helpers.getUser('name', body.name)
 
     // found one, exit out
     if(user) {
@@ -118,7 +100,7 @@ module.exports.login = async (event, context) => {
     if(!helpers.hasAllParams(body, ['name', 'pass'], res)) return res
 
     // check that user exists
-    const user = await getUser(body.name)
+    const user = await helpers.getUser('name', body.name)
 
     if(!user) {
         res.statusCode = 404
@@ -148,32 +130,15 @@ module.exports.login = async (event, context) => {
 }
 
 module.exports.cookielogin = async (event, context) => {
-    const body = JSON.parse(event.body)
-
     let res = helpers.res()
 
-    // check they've sent everything over
-    if(!helpers.hasAllParams(body, ['user'], res)) return res
+    // check the user and their token exist
+    const token = helpers.token(event)
+    const user = await helpers.getUser('auth_token', token)
 
-    const delimiter = "/"
-    const name = body.user.split(delimiter)[0]
-    const token = body.user.split(delimiter)[1]
-
-    // check that user exists
-    const user = await getUser(name)
-
-    if(!user) {
-        res.statusCode = 404
-        res.body = JSON.stringify({resp: false, msg: "That user doesn't exist"})
-        return res
-    }
-
-    // compare the passwords
-    const result = user.auth_token===token
-
-    if(result) {
+    if(user) {
         // set a new token
-        const newToken = await updateToken(name)
+        const newToken = await updateToken(user.name)
 
         res.body = JSON.stringify({resp: true, name: user.name, token: newToken})
     } else {
@@ -185,28 +150,13 @@ module.exports.cookielogin = async (event, context) => {
 }
 
 module.exports.logout = async (event, context) => {
-    const body = JSON.parse(event.body)
-
     let res = helpers.res()
 
-    // check they've sent everything over
-    if(!helpers.hasAllParams(body, ['user'], res)) return res
-
-    const delimiter = "/"
-    const name = body.user.split(delimiter)[0]
-    const token = body.user.split(delimiter)[1]
-
     // check that user exists
-    const user = await getUser(name)
-
-    if(!user) {
-        res.statusCode = 404
-        res.body = JSON.stringify({resp: false, msg: "That user doesn't exist"})
-        return res
-    }
+    const user = await helpers.getUser('auth_token', helpers.token(event))
 
     // check the token is valid
-    if(token!==user.auth_token) {
+    if(!user) {
         res.statusCode = 400
         res.body = JSON.stringify({resp: false, msg: "Invalid auth token"})
         return res
@@ -224,7 +174,7 @@ module.exports.hint = async (event, context) => {
     let res = helpers.res()
 
     // check that user exists
-    const user = await getUser(event.pathParameters.name)
+    const user = await helpers.getUser('name', event.pathParameters.name)
 
     if(!user) {
         res.statusCode = 400
@@ -249,11 +199,12 @@ module.exports.stats = async (event, context) => {
     let res = helpers.res()
 
     // check that user exists
-    const user = await getUser(event.pathParameters.name)
+    const token = helpers.token(event)
+    const user = await helpers.getUser('auth_token', token)
 
     if(!user) {
         res.statusCode = 404
-        res.body = JSON.stringify({resp: false, msg: "That user doesn't exist"})
+        res.body = JSON.stringify({resp: false, msg: "Invalid auth token"})
         return res
     }
 

@@ -3,11 +3,10 @@ import './AccountBox.css'
 import { Consumer } from '../context/Context'
 import Spinner from '../spinner/Spinner'
 import Chip from '../chip/Chip'
-import Cookies from 'universal-cookie'
 import menu from '../../assets/menu.png'
-import { url, emoji } from '../../utils/common'
-
-const cookies = new Cookies()
+import { emoji } from '../../utils/common'
+import { getToken, setToken } from '../../utils/cookies'
+import { cookieLogin } from '../context/User'
 
 export default class AccountBox extends Component {
     state = {
@@ -22,18 +21,15 @@ export default class AccountBox extends Component {
     }
 
     componentWillMount() {
-        // try to login with our cookie
-        if(cookies.get('user')) {
+        if(getToken()) {
+            // try to login with our cookie
             this.setMode(4)
 
-            fetch(url + "/cookielogin", {method: 'post', body: JSON.stringify({user: cookies.get('user')})})
-            .then(res => {
-                return res.json()
-            })
+            cookieLogin()
             .then(resJson => {
                 if(resJson.resp) {
-                    // our auth token was valid, let the context know we have a temp user
-                    cookies.set('user', resJson.name + "/" + resJson.token)
+                    // our auth token was valid, let the context know we have a user
+                    setToken(resJson.token)
                     this.setState({tempUser: resJson})
                 } else {
                     this.setMode(0)

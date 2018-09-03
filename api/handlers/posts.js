@@ -28,14 +28,24 @@ module.exports.newpost = async (event, context) => {
     let res = helpers.res()
 
     // check they've sent everything over
-    if(!helpers.hasAllParams(body, ['user', 'post'], res)) return res
+    if(!helpers.hasAllParams(body, ['post'], res)) return res
+
+    // check the token is valid
+    let user = await helpers.getUser('auth_token', helpers.token(event))
+
+    // or if they're anonymous
+    if(!user) {
+        user = {
+          name: "anonymous"
+        }
+    }
 
     // character limits
     if(body.post.text.length>2500) body.post.text = body.post.text.substring(0, 2500)
 
     let post = {
         id: uuid.v4(),
-        author: body.user,
+        author: user.name,
         text: body.post.text,
         reacts: [[], [], [], [], []],
         hideAuthor: body.post.hideAuthor || false,
@@ -88,33 +98,42 @@ module.exports.getposts = async (event, context) => {
 
 module.exports.react = async (event, context) => {
     const body = JSON.parse(event.body)
-    const user = body.user
-    const emoji = body.emoji
 
     let res = helpers.res()
+    
+    // check the token is valid
+    const user = await helpers.getUser('auth_token', helpers.token(event))
+    if(!user) {
+        res.statusCode = 400
+        res.body = JSON.stringify({resp: false, msg: "You need to be logged in to react!"})
+        return res
+    }
+
+    if(!helpers.hasAllParams(body, ['emoji'], res)) return res
+    const emoji = body.emoji
 
     // check that post exists
     let post = await getPost(body.postid)  
-    
+
     if(!post) {
-        res.statusCode = 400        
+        res.statusCode = 404        
         res.body = JSON.stringify({resp: false, msg: "That post does not exist!"})
         return res
     }
 
     let prevVote
-    if(post.author!==user) {
+    if(post.author!==user.name) {
         for(let i=0; i<post.reacts.length; i++) {
             // find if they've already voted for one
-            if(post.reacts[i].includes(user)) {
-                post.reacts[i].splice(post.reacts[i].indexOf(user))
+            if(post.reacts[i].includes(user.name)) {
+                post.reacts[i].splice(post.reacts[i].indexOf(user.name))
                 prevVote = i
                 break
             }
         }
 
         // only push if they haven't clicked the same one
-        if(prevVote!==emoji) post.reacts[emoji].push(user)  
+        if(prevVote!==emoji) post.reacts[emoji].push(user.name)  
         
         // update the post
         db.updatePost(post, (err, result) => {

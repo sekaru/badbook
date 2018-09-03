@@ -2,10 +2,8 @@ import { Component } from 'inferno'
 import createInfernoContext from 'create-inferno-context'
 import * as UserFuncs from './User'
 import * as PostFuncs from './Post'
-import Cookies from 'universal-cookie'
 import { url } from '../../utils/common'
-
-const cookies = new Cookies()
+import { setToken, deleteToken } from '../../utils/cookies'
 
 const Context = createInfernoContext()
 
@@ -67,17 +65,17 @@ export class ContextProvider extends Component {
     setUser = (res) => {
         this.setState({user: res.name})
 
-        cookies.set('user', res.name + "/" + res.token)
+        setToken(res.token)
 
         // request stats
-        UserFuncs.getStats(res.name, resJson => {
-            if(!resJson.resp) {           
-                alert(resJson.msg)
-                return
-            }
+        UserFuncs.getStats(resJson => {
+          if(!resJson.resp) {           
+              alert(resJson.msg)
+              return
+          }
 
-            this.setState({stats: resJson.stats})
-        })
+          this.setState({stats: resJson.stats})
+      })
     }
 
     getHint = (name, callback) => {
@@ -94,10 +92,10 @@ export class ContextProvider extends Component {
     }
 
     logout = () => {
-        UserFuncs.logout(cookies.get('user'))
+        UserFuncs.logout()
         this.setState({name: null, stats: null})
 
-        cookies.remove('user')
+        deleteToken()
     }
 
     getPost = (id) => {
@@ -107,7 +105,7 @@ export class ContextProvider extends Component {
     }
 
     addPost = (post) => {
-        PostFuncs.addPost(this.state.user, post, resJson => {
+        PostFuncs.addPost(post, resJson => {
             if(!resJson.resp) {
                 alert(resJson.msg)
                 return
@@ -119,14 +117,16 @@ export class ContextProvider extends Component {
             this.setState({posts})
 
             // increment their stats
-            let stats = this.state.stats
-            stats.count++
-            this.setState({stats})
+            if(this.state.user) {
+                let stats = this.state.stats
+                stats.count++
+                this.setState({stats})
+            }
         })
     }
 
     react = (id, emoji) => {
-        PostFuncs.react(id, this.state.user, emoji, resJson => {
+        PostFuncs.react(id, emoji, resJson => {
             if(!resJson.resp) {
                 alert(resJson.msg)
                 return

@@ -8,6 +8,7 @@
     "create-inferno-context": "^0.2.4",
     "inferno": "^5.4.2",
     "inferno-scripts": "6.3.2",
+    "serverless": "^1.30.3",
     "universal-cookie": "^3.0.4",
     "uuid": "^3.3.2"
   },

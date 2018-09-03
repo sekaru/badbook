@@ -1,9 +1,7 @@
 import { url } from '../../utils/common'
 
-export const addPost = (user, post, callback) => {
-    if(!user) user = "anonymous"
-
-    fetch(url + "/posts", {method: 'post', body: JSON.stringify({user: user, post: post})})
+export const addPost = (post, callback) => {
+    fetch(url + "/posts", {method: 'post', credentials: 'include', body: JSON.stringify({post: post})})
     .then(res => {
         return res.json()
     })
@@ -12,14 +10,8 @@ export const addPost = (user, post, callback) => {
     })
 }
 
-export const react = (id, user, emoji, callback) => {
-    // can't vote if anonymous
-    if(user==null) {
-        alert("You need to be logged in to react")
-        return
-    }
-
-    fetch(url + "/react", {method: 'post', body: JSON.stringify({postid: id, user: user, emoji: emoji})})
+export const react = (id, emoji, callback) => {
+    fetch(url + "/react", {method: 'post', credentials: 'include', body: JSON.stringify({postid: id, emoji: emoji})})
     .then(res => {
         return res.json()
     })

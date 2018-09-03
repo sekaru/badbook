@@ -25,8 +25,15 @@ export const login = (user, callback) => {
     })
 }
 
-export const getStats = (user, callback) => {
-    return fetch(url + "/stats/" + user)
+export const cookieLogin = () => {
+    return fetch(url + "/cookielogin", {method: 'post', credentials: 'include'})
+    .then(res => {
+        return res.json()
+    })
+}
+
+export const getStats = (callback) => {
+    return fetch(url + "/stats", {credentials: 'include'})
     .then(res => {
         return res.json()
     })
@@ -45,6 +52,6 @@ export const getHint = (user, callback) => {
     })
 }
 
-export const logout = (user) => {
-    fetch(url + "/logout", {method: 'post', body: JSON.stringify({user: user})})
+export const logout = () => {
+    fetch(url + "/logout", {method: 'post', credentials: 'include'})
 }

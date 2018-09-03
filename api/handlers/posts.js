@@ -36,7 +36,7 @@ module.exports.newpost = async (event, context) => {
     // or if they're anonymous
     if(!user) {
         user = {
-          name: "anonymous"
+            name: "anonymous"
         }
     }
 

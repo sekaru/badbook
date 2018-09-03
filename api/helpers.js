@@ -1,18 +1,5 @@
 const db = require('./db')
 
-parseCookies = (header) => {
-    let obj = {}
-    if(!header) return obj
-    
-    let cookies = header.split("; ")
-
-    cookies.forEach(cookie => {
-        obj[cookie.split("=")[0]] = cookie.split("=")[1]
-    })
-
-    return obj
-}
-
 module.exports.res = () => {
     return {
         statusCode: 200,
@@ -23,9 +10,18 @@ module.exports.res = () => {
 }
 
 module.exports.token = (event) => {
-    let cookies = parseCookies(event.headers.Cookie)
-    if(!cookies['user']) return null
-    return cookies['user']
+    let cookiesObj = {}
+    let header = event.headers.Cookie
+    if(!header) return null
+    
+    let cookies = header.split("; ")
+
+    cookies.forEach(cookie => {
+        cookiesObj[cookie.split("=")[0]] = cookie.split("=")[1]
+    })
+
+    if(!cookiesObj['user']) return null
+    return cookiesObj['user']
 }
 
 module.exports.hasAllParams = (body, params, res) => {

@@ -1,4 +1,5 @@
 import { url } from '../../utils/common'
+import { getToken } from '../../utils/cookies'
 
 export const register = (user, callback) => {
     if(user.pass!==user.pass2) {
@@ -26,14 +27,14 @@ export const login = (user, callback) => {
 }
 
 export const cookieLogin = () => {
-    return fetch(url + "/cookielogin", {method: 'post', credentials: 'include'})
+    return fetch(url + "/cookielogin", {method: 'post', body: JSON.stringify({token: getToken()})})
     .then(res => {
         return res.json()
     })
 }
 
 export const getStats = (callback) => {
-    return fetch(url + "/stats", {credentials: 'include'})
+    return fetch(url + "/stats/" + getToken())
     .then(res => {
         return res.json()
     })
@@ -53,5 +54,5 @@ export const getHint = (user, callback) => {
 }
 
 export const logout = () => {
-    fetch(url + "/logout", {method: 'post', credentials: 'include'})
+    fetch(url + "/logout", {method: 'post', body: JSON.stringify({token: getToken()})})
 }

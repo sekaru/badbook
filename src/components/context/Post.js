@@ -1,7 +1,8 @@
 import { url } from '../../utils/common'
+import { getToken } from '../../utils/cookies'
 
 export const addPost = (post, callback) => {
-    fetch(url + "/posts", {method: 'post', credentials: 'include', body: JSON.stringify({post: post})})
+    fetch(url + "/posts", {method: 'post', body: JSON.stringify({post: post, token: getToken()})})
     .then(res => {
         return res.json()
     })
@@ -11,7 +12,7 @@ export const addPost = (post, callback) => {
 }
 
 export const react = (id, emoji, callback) => {
-    fetch(url + "/react", {method: 'post', credentials: 'include', body: JSON.stringify({postid: id, emoji: emoji})})
+    fetch(url + "/react", {method: 'post', body: JSON.stringify({postid: id, emoji: emoji, token: getToken()})})
     .then(res => {
         return res.json()
     })

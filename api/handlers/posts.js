@@ -31,7 +31,7 @@ module.exports.newpost = async (event, context) => {
     if(!helpers.hasAllParams(body, ['post'], res)) return res
 
     // check the token is valid
-    let user = await helpers.getUser('auth_token', helpers.token(event))
+    let user = await helpers.getUser('auth_token', body.token)
 
     // or if they're anonymous
     if(!user) {
@@ -102,7 +102,7 @@ module.exports.react = async (event, context) => {
     let res = helpers.res()
     
     // check the token is valid
-    const user = await helpers.getUser('auth_token', helpers.token(event))
+    const user = await helpers.getUser('auth_token', body.token)
     if(!user) {
         res.statusCode = 400
         res.body = JSON.stringify({resp: false, msg: "You need to be logged in to react!"})

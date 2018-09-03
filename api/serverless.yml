@@ -55,7 +55,7 @@ functions:
   stats:
     handler: handlers/users.stats
     events:
-      - http: GET stats
+      - http: GET stats/{token}
   newpost:
     handler: handlers/posts.newpost
     events:

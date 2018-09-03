@@ -130,11 +130,12 @@ module.exports.login = async (event, context) => {
 }
 
 module.exports.cookielogin = async (event, context) => {
+    const body = JSON.parse(event.body)
+
     let res = helpers.res()
 
     // check the user and their token exist
-    const token = helpers.token(event)
-    const user = await helpers.getUser('auth_token', token)
+    const user = await helpers.getUser('auth_token', body.token)
 
     if(user) {
         // set a new token
@@ -150,10 +151,12 @@ module.exports.cookielogin = async (event, context) => {
 }
 
 module.exports.logout = async (event, context) => {
+    const body = JSON.parse(event.body)
+    
     let res = helpers.res()
 
     // check that user exists
-    const user = await helpers.getUser('auth_token', helpers.token(event))
+    const user = await helpers.getUser('auth_token', body.token)
 
     // check the token is valid
     if(!user) {
@@ -199,8 +202,7 @@ module.exports.stats = async (event, context) => {
     let res = helpers.res()
 
     // check that user exists
-    const token = helpers.token(event)
-    const user = await helpers.getUser('auth_token', token)
+    const user = await helpers.getUser('auth_token', event.pathParameters.token)
 
     if(!user) {
         res.statusCode = 404

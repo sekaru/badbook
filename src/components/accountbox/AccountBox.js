@@ -112,8 +112,10 @@ export default class AccountBox extends Component {
                             value={this.state.hint} />            
 
                         <br/><br/>
-                        <button onClick={() => this.register(context)}>Register</button>
-                        <button className="closeAccountBox" onClick={() => this.setMode(0)}>Cancel</button>
+                        <div className="buttonGroup">                        
+                            <button onClick={() => this.register(context)}>Register</button>
+                            <button className="closeAccountBox" onClick={() => this.setMode(0)}>Cancel</button>
+                        </div>
                     </div>
                 )}
             </Consumer>
@@ -142,8 +144,10 @@ export default class AccountBox extends Component {
                         {/* Hint */}
                         {this.state.name ? this.renderHint(context) : <div><br/><br/></div>}
                                     
-                        <button onClick={() => this.login(context)}>Login</button>
-                        <button className="closeAccountBox" onClick={() => this.setMode(0)}>Cancel</button>
+                        <div className="buttonGroup">
+                            <button onClick={() => this.login(context)}>Login</button>
+                            <button className="closeAccountBox" onClick={() => this.setMode(0)}>Cancel</button>
+                        </div>
                     </div>
                 )}         
             </Consumer>
@@ -215,9 +219,10 @@ export default class AccountBox extends Component {
                 }  
                 </div>     
                 
-                <br/>
-                <button onClick={() => this.logout(context)}>Logout</button>  
-                <button className="closeAccountBox" onClick={() => this.setState({show: false})}>Hide</button>                              
+                <div className="buttonGroup" style={{marginTop: "1em"}}>
+                    <button onClick={() => this.logout(context)}>Logout</button>  
+                    <button className="closeAccountBox" onClick={() => this.setState({show: false})}>Hide</button>  
+                </div>                            
             </div>
         )
     }

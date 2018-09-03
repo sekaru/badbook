@@ -26,22 +26,23 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
 }
 
-.toolbar input[type="text"] {
-    width: 96px;
-    height: 24px;
+.toolbar input {
+    width: 32px;
+    height: 32px;
     margin-left: 0.5em;
 
-    border: 1px solid #e2e2e2;  
-    border-radius: 6px;
+    padding: 0;
+    border: none;
 }
 
-.toolbar input[type="checkbox"] {
-    margin-left: 0.5em;
-
-    border: 1px solid #e2e2e2;  
+.control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
 }
 
 @media screen and (max-width: 1280px) {

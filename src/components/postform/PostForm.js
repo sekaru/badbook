@@ -1,6 +1,6 @@
 import { Component } from 'inferno'
 import './PostForm.css'
-import { Consumer } from '../context/Context';
+import { Consumer } from '../context/Context'
 
 export default class PostForm extends Component {
     state = {
@@ -32,14 +32,14 @@ export default class PostForm extends Component {
                         )}
                     </Consumer>
                     
-                    <div>
+                    <div className="control">
                         Background colour
-                        <input type="text" onInput={e => this.setState({backgroundColour: e.target.value})} value={this.state.backgroundColour} />
+                        <input type="color" onInput={e => this.setState({backgroundColour: e.target.value})} value={this.state.backgroundColour} />
                     </div>
 
-                    <div>
+                    <div className="control">
                         Text colour
-                        <input type="text" onInput={e => this.setState({textColour: e.target.value})} value={this.state.textColour} />
+                        <input type="color" onInput={e => this.setState({textColour: e.target.value})} value={this.state.textColour} />
                     </div>
 
                     <Consumer>
@@ -47,7 +47,7 @@ export default class PostForm extends Component {
                             <div>
                                 {
                                     context.state.user ?
-                                    <div>
+                                    <div className="control">
                                         Post anonymously
                                         <input type="checkbox" onInput={e => this.setState({hideAuthor: e.target.checked})} value={this.state.hideAuthor} />
                                     </div>

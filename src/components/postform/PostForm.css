@@ -38,6 +38,11 @@
     border: 1px solid #e2e2e2;
 }
 
+.toolbar input[type="checkbox"] {
+    width: 16px !important;
+    height: 16px !important;
+}
+
 .control {
     display: flex;
     align-items: center;
